@@ -1,0 +1,19 @@
+{
+  "name": "backend-shop-react-redux-cloudfront",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AliaksandrHutsanovich/backend-shop-react-redux-cloudfront.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AliaksandrHutsanovich/backend-shop-react-redux-cloudfront/issues"
+  },
+  "homepage": "https://github.com/AliaksandrHutsanovich/backend-shop-react-redux-cloudfront#readme"
+}

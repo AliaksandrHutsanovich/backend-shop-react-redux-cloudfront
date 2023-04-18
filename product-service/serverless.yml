@@ -67,8 +67,8 @@ resources:
           - AttributeName: title
             KeyType: RANGE
         ProvisionedThroughput:
-          ReadCapacityUnits: 5
-          WriteCapacityUnits: 5
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
 
     stocksTable:
       Type: AWS::DynamoDB::Table
@@ -81,5 +81,5 @@ resources:
           - AttributeName: product_id
             KeyType: HASH
         ProvisionedThroughput:
-          ReadCapacityUnits: 5
-          WriteCapacityUnits: 5
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1

@@ -1,5 +1,4 @@
 import { scanProducts, scanStocks } from './utils';
-import { SERVER_ERROR } from './constants';
 
 export const getProductsList = async (event, context, cb) => {
   console.log('getOroductlist: get all products');
@@ -25,9 +24,15 @@ export const getProductsList = async (event, context, cb) => {
 
     cb(null, response);
   } catch(e) {
+    console.log(`error is occured: ${e.message}`);
     cb(null, {
       statusCode: 500,
-      body: JSON.stringify({ message: SERVER_ERROR }),
+      headers: {
+        "Access-Control-Allow-Headers" : "*",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "*",
+      },
+      body: JSON.stringify({ message: e.message }),
     });
   }
 };

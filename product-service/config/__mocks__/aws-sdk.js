@@ -39,10 +39,18 @@ const DynamoDB = {
         };
       }
     }),
+    transactWrite: jest.fn(() => ({
+      promise: () => {},
+    })),
   }),
 };
+
+const SNS = jest.fn(() => ({
+  publish: () => {},
+}));
 
 module.exports = {
   ...AWS,
   DynamoDB,
+  SNS,
 };

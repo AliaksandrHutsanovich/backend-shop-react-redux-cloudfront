@@ -19,6 +19,19 @@ provider:
   stage: dev
   region: eu-west-1
 
+  environment:
+    SNS_ARN:
+      Ref: SNSTopic
+
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action: "sns:*"
+      Resource:
+        Ref: SNSTopic
+    - Effect: "Allow"
+      Action: "dynamodb:*"
+      Resource: "*"
+
 functions:
   getProductsList:
     handler: getProductsList.getProductsList
@@ -49,6 +62,15 @@ functions:
           method: post
           cors: true
           bodyType: 'Product'
+  catalogBatchProcess:
+    handler: catalogBatchProcess.catalogBatchProcess
+    environment:
+      PRODUCTS_TABLE: products
+      STOCKS_TABLE: stocks
+    events:
+      - sqs:
+          batchSize: 5
+          arn: arn:aws:sqs:eu-west-1:568437974916:catalogItemsQueue
 
 resources:
   Resources:
@@ -83,3 +105,32 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+
+    SNSTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        TopicName: createProductTopic
+    SNSSubscription:
+      Type: AWS::SNS::Subscription
+      Properties:
+        FilterPolicyScope: MessageBody
+        FilterPolicy:
+          title:
+            - Pencil
+            - Pen
+        Endpoint: ahutsanovich@gmail.com
+        Protocol: email
+        TopicArn:
+          Ref: SNSTopic
+    SNSSubscription2:
+      Type: AWS::SNS::Subscription
+      Properties:
+        FilterPolicyScope: MessageBody
+        FilterPolicy:
+          title:
+            - Letter
+            - Sharpener
+        Endpoint: guts-817@rambler.ru
+        Protocol: email
+        TopicArn:
+          Ref: SNSTopic

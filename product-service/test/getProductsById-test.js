@@ -1,11 +1,11 @@
-import { expect } from "chai";
 import lambdaTester from "lambda-tester";
-import { products } from '../products';
+import { products } from '../config/__mocks__/products';
+import { stocks } from '../config/__mocks__/stocks';
 import { NO_PRODUCT_FOUND_MESSAGE } from '../constants';
 
 import { getProductsById } from '../getProductsById';
 
-describe('getProductsById', () => {
+describe('getProductById', () => {
     let mockData = null;
     it('is invoked with code 200', (done) => {
       mockData = { pathParameters: { productId: products[0].id } };
@@ -13,9 +13,14 @@ describe('getProductsById', () => {
         .event(mockData)
         .expectResult((result) => {
   
-          expect(result.statusCode).to.equal(200);
+          expect(result.statusCode).toEqual(200);
   
-          expect(result.body).to.equal(JSON.stringify({ data: [products[0]] }));
+          expect(result.body).toEqual(
+            JSON.stringify({
+              ...products[0],
+              count: stocks.find(({ product_id }) => product_id === products[0].id).count,
+            }),
+          );
   
           done();
         }).catch(done);
@@ -28,9 +33,9 @@ describe('getProductsById', () => {
         .event(mockData)
         .expectResult((result) => {
   
-          expect(result.statusCode).to.equal(404);
+          expect(result.statusCode).toEqual(404);
   
-          expect(result.body).to.equal(JSON.stringify({ message: NO_PRODUCT_FOUND_MESSAGE }));
+          expect(result.body).toEqual(JSON.stringify({ message: NO_PRODUCT_FOUND_MESSAGE }));
   
           done();
         }).catch(done);

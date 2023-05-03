@@ -21,11 +21,21 @@ export const getProductsById = async (event, context, callback) => {
     if (e.message === NO_PRODUCT_FOUND_MESSAGE) {
       callback(null, {
         statusCode: 404,
+        headers: {
+          "Access-Control-Allow-Headers" : "*",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "*",
+        },
         body: JSON.stringify({ message: e.message }),
       });
     } else {
       callback(null, {
         statusCode: 500,
+        headers: {
+          "Access-Control-Allow-Headers" : "*",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "*",
+        },
         body: JSON.stringify({ message: SERVER_ERROR }),
       });
     }

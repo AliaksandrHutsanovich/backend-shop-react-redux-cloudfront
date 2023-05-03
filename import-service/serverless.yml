@@ -32,6 +32,11 @@ functions:
       - http:
           path: import
           method: get
+          cors:
+            origin: '*'
+          authorizer:
+            arn: arn:aws:lambda:eu-west-1:568437974916:function:authorization-service-dev-basicAuthorizer
+            type: token
   importFileParser:
     handler: importFileParser.importFileParser
     events:
@@ -48,3 +53,12 @@ resources:
       Type: AWS::SQS::Queue
       Properties:
         QueueName: catalogItemsQueue
+    Unauthorized:
+      Type: AWS::ApiGateway::GatewayResponse
+      Properties:
+        ResponseParameters:
+          "gatewayresponse.header.Access-Control-Allow-Origin": "'*'"
+          "gatewayresponse.header.Access-Control-Allow-Headers": "'*'"
+        ResponseType: "DEFAULT_4XX"
+        RestApiId:
+          Ref: "ApiGatewayRestApi"

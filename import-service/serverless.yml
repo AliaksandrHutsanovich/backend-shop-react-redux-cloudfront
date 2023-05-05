@@ -15,6 +15,16 @@ provider:
   stage: dev
   region: eu-west-1
 
+  environment:
+    SQS_URL:
+      Ref: SQSQueue
+
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action: "sqs:*"
+      Resource:
+        - Fn::GetAtt: [ SQSQueue, Arn ]
+
 functions:
   importProductsFile:
     handler: importProductsFile.importProductsFile
@@ -31,3 +41,10 @@ functions:
           rules:
               - prefix: uploaded
           existing: true
+
+resources:
+  Resources:
+    SQSQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: catalogItemsQueue

@@ -1,5 +1,8 @@
 const router = require('express').Router();
 const axios = require('axios');
+const NodeCache = require('node-cache');
+
+const cache = new NodeCache();
 
 router.route('/product/available').get(async (req, res) => {
   axios
@@ -9,12 +12,32 @@ router.route('/product/available').get(async (req, res) => {
     });
 });
 
-router.route('/products').get(async (req, res) => {
+const cacheRequest = (duration) => (req, res, next) => {
+  const key = req.originalUrl;
+  const cachedResponse = cache.get(key);
+
+  if (cachedResponse) {
+    res.send(cachedResponse);
+  } else {
+    res.originalSend = res.send;
+    res.send = (body) => {
+      res.originalSend(body);
+      cache.set(key, body, duration);
+    };
+    next();
+  }
+};
+
+router.route('/products').get(cacheRequest(120), async (req, res) => {
   console.log('productService =', process.env.PRODUCT_SERVICE);
   axios
     .get(`${process.env.PRODUCT_SERVICE}/products`)
     .then((serviceResult) => {
       res.json(serviceResult.data);
+    })
+    .catch((e) => {
+      res.status(502);
+      res.json({ message: e.message });
     });
 });
 

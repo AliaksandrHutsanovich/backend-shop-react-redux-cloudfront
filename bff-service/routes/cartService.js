@@ -7,7 +7,11 @@ router.route('/api/profile/cart').get(async (req, res) => {
   axios
     .get(
       `${process.env.CART_SERVICE}/api/profile/cart`,
-      { headers },
+      {
+        headers: {
+          Authorization: headers.authorization,
+        },
+      },
     )
     .then((serviceResult) => {
       res.json(serviceResult.data);
@@ -22,7 +26,11 @@ router.route('/api/profile/cart').put(async (req, res) => {
     .put(
       `${process.env.CART_SERVICE}/api/profile/cart`,
       data,
-      { headers }
+      {
+        headers: {
+          Authorization: headers.authorization,
+        },
+      }
     )
     .then(() => {
       res.send('data is saved');

@@ -14,11 +14,6 @@ export const getProductsList = async (event, context, cb) => {
 
     const response = {
       statusCode: 200,
-      headers: {
-        "Access-Control-Allow-Headers" : "*",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "*",
-      },
       body: JSON.stringify(products),
     };
 
@@ -27,11 +22,6 @@ export const getProductsList = async (event, context, cb) => {
     console.log(`error is occured: ${e.message}`);
     cb(null, {
       statusCode: 500,
-      headers: {
-        "Access-Control-Allow-Headers" : "*",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "*",
-      },
       body: JSON.stringify({ message: e.message }),
     });
   }
